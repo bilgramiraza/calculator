@@ -34,4 +34,4 @@ function operate(){
     }
     console.log(result);
 }
-operate();
+//operate();
