@@ -2,13 +2,14 @@
     box-sizing: border-box;   
     font-weight: 400;
 }
-.calculator{
+body{
     background-color: gray;
     display: flex;
     flex-direction: column;
-    width:90vw;
+    justify-content: space-evenly;
+    width:90%;
     height:95vh;
-    margin: 0 auto;
+    margin: 1em auto;
 }
 
 .calcTitle{
@@ -20,7 +21,7 @@
 }
 
 .calcScreen{
-    background-color: green;
+    background-color: white;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -49,9 +50,14 @@ button{
 .operation{
     background-color: orange;
 }
-.function{
-    background-color: blueviolet;
+.function,.equals{
+    background-color: red;
+    color: white;
 }
 .numbers{
     background-color: white;
+}
+.advanced{
+    background-color: purple;
+    color: white;
 }

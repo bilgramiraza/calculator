@@ -1,37 +1,72 @@
+const display=document.querySelector('.calcScreen');
+
+const numberBtn=document.querySelectorAll('.numbers');
+const operatorBtn=document.querySelectorAll('.operation');
+const equalsBtn=document.querySelector('.equals');
+let inputA="";
+let inputB="";
+let operator="";
+let result=0;
+
+numberBtn.forEach((button)=>{
+    button.addEventListener('click',(event)=>{
+        if(operator===""){
+            inputA+=event.target.textContent;
+            displayUpdate(inputA);
+        }
+        else{
+            inputB+=event.target.textContent;
+            displayUpdate(inputB);
+        }
+    });
+});
+
+operatorBtn.forEach((button)=>{
+    button.addEventListener('click',(event)=>{
+        operator=event.target.textContent;
+    });
+});
+
+equalsBtn.addEventListener('click',(event)=>{
+    result=operate(parseFloat(inputA),parseFloat(inputB),operator);
+    displayUpdate(result);
+    inputA="";
+    inputB="";
+    operator="";
+});
+
 function add(a,b){
     return a+b;
 }
-function Subtract(a,b){
+function subtract(a,b){
     return a-b;
 }
 function multiply(a,b){
     return a*b;
 }
 function divide(a,b){
-    if(!a || !b)
-        return "Invalid";
     return a/b;
 }
 
-function operate(){
-    let a=parseFloat(prompt("Enter the First Numbers"),10);
-    let b=parseFloat(prompt("Enter the First Numbers"),10);
-    let operator =prompt("Enter the Operation(+,-,*,/)");
-    let result;
+function operate(a,b,operator){
     switch (operator) {
         case '+':
-            result=add(a,b);
+            sum=add(a,b);
             break;
         case '-':
-            result=Subtract(a,b);
+            sum=subtract(a,b);
             break;
         case '*':
-            result=multiply(a,b);
+            sum=multiply(a,b);
             break;
-        case '/':
-            result=divide(a,b);
+        case '/':if(!b)
+                return "Invalid";
+            sum=divide(a,b);
             break;
     }
-    console.log(result);
+    return sum;
 }
-//operate();
+
+function displayUpdate(input){
+    display.textContent=input;
+}
