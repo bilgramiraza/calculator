@@ -50,11 +50,11 @@ button{
 .operation{
     background-color: orange;
 }
-.function,.equals{
+.function{
     background-color: red;
     color: white;
 }
-.numbers{
+.numbers,.dot{
     background-color: white;
 }
 .advanced{

@@ -1,74 +1,112 @@
-const numberBtn=document.querySelectorAll('.numbers');
-const operatorBtn=document.querySelectorAll('.operation');
-const equalsBtn=document.querySelector('.equals');
-const allClearBtn=document.querySelector('#allClear');
-const clearBtn=document.querySelector('#clear');
+window.onload=init();
 
-let inputA="";
-let inputB="";
-let operator="";
-let result=0;
+function init() {
+    let calc={
+        inputA:"",
+        inputB:"",
+        operator:"",
+        result:"",
+        };
+    const numberBtn=document.querySelectorAll('.numbers');
+    const dotBtn=document.querySelector('#dot');
+    const operatorBtn=document.querySelectorAll('.operation');
+    const equalsBtn=document.querySelector('#equal');
+    const allClearBtn=document.querySelector('#allClear');
+    const clearBtn=document.querySelector('#clear');
 
-numberBtn.forEach((button)=>{
-    button.addEventListener('click',(event)=>{
-        if(operator===""){
-            if(inputA.includes('.')&&event.target.textContent===".")
-                inputA+="";
-            else
-                inputA+=event.target.textContent;
-            displayUpdate(inputA);
-        }
+
+    numberBtn.forEach((button)=>{
+        button.addEventListener('click',(event)=>{
+            adder(calc,event.target.textContent);
+            display(calc);
+        });
+    });
+
+    dotBtn.addEventListener('click',(event)=>{
+        if((calc.operator===""&&calc.inputA.includes('.'))||calc.inputB.includes('.'));//If true ignores input
         else{
-            if(inputB.includes('.')&&event.target.textContent===".")
-                inputB+="";
-            else
-                inputB+=event.target.textContent;
-            displayUpdate(inputB);
+            adder(calc,".");
+            display(calc);
         }
     });
-});
 
-operatorBtn.forEach((button)=>{
-    button.addEventListener('click',(event)=>{
-        if(operator!==""&&inputB!==""){
-            result=operate(inputA,inputB,operator);
-            inputA=result.toString(10);
-            inputB="";
-            operator=event.target.textContent;
-        }   
-        else
-            operator=event.target.textContent;
+    operatorBtn.forEach((button)=>{
+        button.addEventListener('click',(event)=>{
+            if(calc.operator!==""&&calc.inputB!==""){
+                operate(calc);
+                display(calc,true);
+                adder(calc,"",true);
+                calc.operator=event.target.textContent;
+            }
+            else
+                calc.operator=event.target.textContent;
+        });
     });
-});
 
-equalsBtn.addEventListener('click',(event)=>{
-    if(inputB!==""){
-        result=operate(inputA,inputB,operator);
-        displayUpdate(result);
-        inputA=result.toString(10);
-        inputB="";
+    equalsBtn.addEventListener('click',(event)=>{
+        if(calc.inputB!==""){
+            operate(calc);
+            display(calc,true);
+            adder(calc,"",true);
+        }
+    });
+
+    allClearBtn.addEventListener('click',()=>{
+        calc.inputA="";
+        calc.inputB="";
+        calc.operator="";
+        calc.result="0";
+        display(calc,true);
+    });
+
+    clearBtn.addEventListener('click',()=>{
+        if(calc.operator==="")  calc.inputA=calc.inputA.slice(0,calc.inputA.length-1);
+        else calc.inputB=calc.inputB.slice(0,calc.inputB.length-1);
+        display(calc);
+    });
+}
+
+function adder(obj,input,result=false){
+    if(result){
+        obj.operator="";
+        obj.inputA=obj.result;
+        obj.inputB="";
     }
-});
+    else if(obj.operator==="")  obj.inputA+=input;
+    else    obj.inputB+=input;
+}
 
-allClearBtn.addEventListener('click',()=>{
-    inputA="";
-    inputB="";
-    operator="";
-    result=0;
-    displayUpdate(result);
-});
+function display(obj,result=false) {
+    const displayPanel=document.querySelector('.calcScreen');
+    if(result)  displayPanel.textContent=obj.result;
+    else if(obj.operator==="")  displayPanel.textContent=obj.inputA;
+    else    displayPanel.textContent=obj.inputB;  
+}
 
-clearBtn.addEventListener('click',()=>{
-    if(operator===""){
-        inputA=inputA.slice(0,inputA.length-1);
-        displayUpdate(inputA);
+function operate(obj) {
+    let a;
+    let b;
+    let result;
+    if(obj.inputA==="") a=0;
+    else    a=parseFloat(obj.inputA);
+
+    if(obj.inputB==="") b=0;
+    else    b=parseFloat(obj.inputB);
+
+    switch (obj.operator) {
+        case '+':result=add(a,b);
+            break;
+        case '-':result=subtract(a,b);
+            break;
+        case '*':result=multiply(a,b);
+            break;
+        case '/':result=divide(a,b);
+            break;
+        case '%':result=percent(a,b);
+            break;   
     }
-    else{
-        inputB=inputB.slice(0,inputB.length-1);
-        displayUpdate(inputB);
-    }
-});
-
+    obj.result=result.toString(10);
+}
 function add(a,b){
     return a+b;
 }
@@ -79,49 +117,12 @@ function multiply(a,b){
     return a*b;
 }
 function divide(a,b){
+    if(!b){
+        alert("Divide By Zero Error");
+        return 0;
+    }
     return a/b;
 }
 function percent(a,b){
     return (a/100)*b;
-}
-
-function operate(a,b,operator){
-    let result=0;
-    if(a==="")
-        a=0;
-    else
-        a=parseFloat(a);
-    if(b==="")
-        b=0;
-    else
-        b=parseFloat(b);
-    switch (operator) {
-        case '+':
-            result=add(a,b);
-            break;
-        case '-':
-            result=subtract(a,b);
-            break;
-        case '*':
-            result=multiply(a,b).toFixed(16);
-            break;
-        case '/':if(!b){
-                alert("INVALID");
-                break;
-            }
-            result=divide(a,b).toFixed(16);
-            break;
-        case '%':if(!b){
-                alert("INVALID");
-                break;
-            }
-            result=percent(a,b).toFixed(16);
-            break;
-    }
-    return result;
-}
-
-function displayUpdate(input){
-    const display=document.querySelector('.calcScreen');
-    display.textContent=input;
 }
