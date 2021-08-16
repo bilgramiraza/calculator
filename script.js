@@ -1,6 +1,9 @@
 const numberBtn=document.querySelectorAll('.numbers');
 const operatorBtn=document.querySelectorAll('.operation');
 const equalsBtn=document.querySelector('.equals');
+const allClearBtn=document.querySelector('#allClear');
+const clearBtn=document.querySelector('#clear');
+
 let inputA="";
 let inputB="";
 let operator="";
@@ -44,6 +47,25 @@ equalsBtn.addEventListener('click',(event)=>{
         displayUpdate(result);
         inputA=result.toString(10);
         inputB="";
+    }
+});
+
+allClearBtn.addEventListener('click',()=>{
+    inputA="";
+    inputB="";
+    operator="";
+    result=0;
+    displayUpdate(result);
+});
+
+clearBtn.addEventListener('click',()=>{
+    if(operator===""){
+        inputA=inputA.slice(0,inputA.length-1);
+        displayUpdate(inputA);
+    }
+    else{
+        inputB=inputB.slice(0,inputB.length-1);
+        displayUpdate(inputB);
     }
 });
 
