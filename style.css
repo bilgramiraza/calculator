@@ -32,17 +32,15 @@ body{
     font-size: 2em;
     border: 0.125em inset black;
 }
-
 .buttonBody{
     display: grid;
     width: 95%;
-    height:70%;
+    height:60%;
     margin: 1em auto;
     grid-template-columns: repeat(4,1fr);
     grid-template-rows: repeat(5,1fr);
     gap:0.25em;
 }
-
 button{
     font-size: 3em;
     background: none;

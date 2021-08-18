@@ -17,7 +17,7 @@ function init() {
     const clearBtn=document.querySelector('#clear');            //binds "C" Button to variable
     //Binding DOM elements to variables 
     
-//////Event Handlers///////////////////////////////////////
+    //////Event Handlers///////////////////////////////////////
     //Goes through each element in the node list and add an event listener to it
     numberBtn.forEach((button)=>{
         button.addEventListener('click',(event)=>{     //waits for when a 'number' is clicked
@@ -54,7 +54,7 @@ function init() {
         });
     });
 
-    
+///////////////////////////////////////////////////    
     equalsBtn.addEventListener('click',(event)=>{   //waits for when the 'Equals to'(=) button is clicked
         if(calc.inputB!==""){                       //checks to make sure the button hasn't been pressed prematurely 
             operate(calc);                          //calculates the value of the 2 numbers 
@@ -62,7 +62,8 @@ function init() {
             adder(calc,"",true);                    //then places the result to the first number and empties the second
         }                                           //number for further operations, if any.
     });
-
+    ///////////////////////////////////////////////////    
+    
     allClearBtn.addEventListener('click',()=>{      //waits for when the 'All Clear'(AC) button is clicked
         calc.inputA="";                             //Sets all values to Zero or empty
         calc.inputB="";
@@ -166,4 +167,5 @@ function divide(a,b){
 function percent(a,b){
     return (a/100)*b;
 }
+
 //End of calculation Functions
