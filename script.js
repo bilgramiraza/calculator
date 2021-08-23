@@ -15,6 +15,7 @@ function init() {
     const equalsBtn=document.querySelector('#equal');           //binds "=" Button to variable
     const allClearBtn=document.querySelector('#allClear');      //binds "AC" Button to variable
     const clearBtn=document.querySelector('#clear');            //binds "C" Button to variable
+    const extraBtn=document.querySelector('.extra');
     //Binding DOM elements to variables 
     
     //////Event Handlers///////////////////////////////////////
@@ -49,8 +50,10 @@ function init() {
                                                             //number for further operations
                 calc.operator=event.target.textContent;     //finally stores this new operation for the operation between the next 2 numbers
             }
-            else
+            else{
                 calc.operator=event.target.textContent;     //adds operation to the variable for calculations
+                display(calc);
+            }
         });
     });
 
@@ -77,6 +80,8 @@ function init() {
         else calc.inputB=calc.inputB.slice(0,calc.inputB.length-1); //Then removes the last added character from the string
         display(calc);  //displays modified number
     });
+
+    extraBtn.addEventListener('click',()=>{advancedPanel(calc)});
 //////Event Handlers///////////////////////////////////////
 }
 //End of Initializing Function
@@ -99,21 +104,51 @@ function adder(obj,input,result=false){
 }
 //End of Adder Function
 
-// #3 Display Function/////////////////// 
+// #3 Advanced operations Function///////////////////
+function advancedPanel(obj) {
+    const advanceBtn=document.querySelectorAll('.advanced');
+    advanceBtn.forEach((button)=>{
+        button.addEventListener('click',(event)=>{
+            obj.operator=event.target.id;
+            console.log(obj.operator);
+            operate(obj);
+            display(obj,true);
+            adder(obj,"",true);
+        });
+    });
+}
+///////////////////////////////
+
+// #4 Display Function/////////////////// 
 //Responsible for displaying numbers on the webpage.
 //Determines which number to display, on the basis of the state of the 'operator' variable
 //(empty)=>Number1
 //(Any other value)=>Number 2
 //Also has an special 'result' flag in case we want to show the result from the last calculation(multi-step calculations)
 function display(obj,result=false) {
-    const displayPanel=document.querySelector('.calcScreen');
-    if(result)  displayPanel.textContent=obj.result;
-    else if(obj.operator==="")  displayPanel.textContent=obj.inputA;
-    else    displayPanel.textContent=obj.inputB;  
+    const operation=document.querySelector('.operationDisplay');
+    const input=document.querySelector('.inputDisplay');
+    const history=document.querySelector('.historyDisplay');
+
+    if(result){
+        operation.textContent=(obj.operator===""?" ":obj.operator);
+        input.textContent=(obj.result===""?" ":obj.result);
+        history.textContent=(obj.inputB===""?" ":obj.inputB);
+    }
+    else if(obj.operator===""){
+        operation.textContent=(obj.operator===""?" ":obj.operator);
+        input.textContent=(obj.inputA===""?" ":obj.inputA);
+        history.textContent=(obj.result===""?" ":obj.result);
+    }
+    else{
+        operation.textContent=(obj.operator===""?" ":obj.operator);
+        input.textContent=(obj.inputB===""?" ":obj.inputB);
+        history.textContent=(obj.inputA===""?" ":obj.inputA);
+    }
 }
 //End of Display Function
 
-// #4 Operate Function/////////////////// 
+// #5 Operate Function/////////////////// 
 // Responsible for deciding which operation to perform on the numbers provided
 function operate(obj) {
     let temp1,temp2;
@@ -136,6 +171,31 @@ function operate(obj) {
             break;
         case '%':result=percent(temp1,temp2);
             break;   
+        case 'square':result=exponent(temp1);
+            break;
+        case 'factorial':result=factorial(temp1);
+            break;
+        case 'sqroot':result=Math.sqrt(temp1);
+            break;
+        case 'sine':result=Math.sin(temp1);
+            break;
+        case 'cosine':result=Math.cos(temp1);
+            break;
+        case 'tangent':result=Math.tan(temp1);
+            break;
+        case 'euler':result=Math.E;
+            break;
+        case 'pi':result=Math.PI;
+            break;
+    }
+    if(result===undefined){
+        obj.result="0";
+        return;
+    }
+    else if(Number.isNaN(result)){
+        obj.result="0";
+        alert("INVALID INPUT");
+        return;
     }
     textresult=result.toString(10);//converts the result into a string and stores it into a temp variable  
     if(textresult.includes('.')){   //check for numbers with too many decimal numbers
@@ -147,7 +207,7 @@ function operate(obj) {
 }
 //End of operate Function
 
-// #5 Calculation Functions ////////////
+// #6 Calculation Functions ////////////
 function add(a,b){
     return a+b;
 }
@@ -158,14 +218,22 @@ function multiply(a,b){
     return a*b;
 }
 function divide(a,b){
-    if(!b){
-        alert("Divide By Zero Error");
-        return 0;
-    }
+    if(!b)  return NaN;
     return a/b;
 }
 function percent(a,b){
     return (a/100)*b;
+}
+function exponent(a){
+    return a**2;
+}
+function factorial(a) {
+    let result=1;
+    while(a){
+        result*=a;
+        --a;
+    }
+    return result;
 }
 
 //End of calculation Functions

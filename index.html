@@ -9,29 +9,47 @@
     <title>Calculator</title>
 </head>
 <body>
-    <h1 class="calcTitle">CALCULATOR</h1>
-    <h2 class="calcScreen">0</h2>
+    <h2 class="calcTitle">CALCULATOR</h2>
+    <div class="calcScreen">
+        <p class="operationDisplay">+</p>
+        <div id="inputColumn">
+            <p class="historyDisplay"></p>
+            <p class="inputDisplay">0123</p>
+        </div>
+    </div>
     <div class="buttonBody">
-        <button id="" class="advanced">EXTRA</button>
-        <button id="clear" class="function">C</button>
-        <button id="allClear" class="function">AC</button>
-        <button id="percent" class="operation">%</button>
-        <button id="nine" class="numbers">9</button>
-        <button id="eight" class="numbers">8</button>
-        <button id="seven" class="numbers">7</button>
-        <button id="divide" class="operation">/</button>
-        <button id="six" class="numbers">6</button>
-        <button id="five" class="numbers">5</button>
-        <button id="four" class="numbers">4</button>
-        <button id="multiply" class="operation">*</button>
-        <button id="three" class="numbers">3</button>
-        <button id="two" class="numbers">2</button>
-        <button id="one" class="numbers">1</button>
-        <button id="subtract" class="operation">-</button>
-        <button id="dot" class="dot">.</button>
-        <button id="zero" class="numbers">0</button>
-        <button id="equal" class="function">=</button>
-        <button id="add" class="operation">+</button>
+        <div class="extrapanel">
+            <button id="square" class="advanced">X<sup>2</sup></button>
+            <button id="factorial" class="advanced">X!</button>
+            <button id="sqroot" class="advanced">√X</button>
+            <button id="euler" class="advanced">e</button>
+            <button id="sine" class="advanced">SIN(X)</button>
+            <button id="cosine" class="advanced">COS(X)</button>
+            <button id="tangent" class="advanced">TAN(X)</button>
+            <button id="pi" class="advanced">π</button>
+        </div>
+        <div class="basepanel">
+            <button id="extra" class="extra">EXTRA</button>
+            <button id="clear" class="function">C</button>
+            <button id="allClear" class="function">AC</button>
+            <button id="percent" class="operation">%</button>
+            <button id="nine" class="numbers">9</button>
+            <button id="eight" class="numbers">8</button>
+            <button id="seven" class="numbers">7</button>
+            <button id="divide" class="operation">/</button>
+            <button id="six" class="numbers">6</button>
+            <button id="five" class="numbers">5</button>
+            <button id="four" class="numbers">4</button>
+            <button id="multiply" class="operation">*</button>
+            <button id="three" class="numbers">3</button>
+            <button id="two" class="numbers">2</button>
+            <button id="one" class="numbers">1</button>
+            <button id="subtract" class="operation">-</button>
+            <button id="dot" class="dot">.</button>
+            <button id="zero" class="numbers">0</button>
+            <button id="equal" class="function">=</button>
+            <button id="add" class="operation">+</button>
+        </div>
     </div>
 
 </body>
