@@ -318,6 +318,8 @@ function exponent(a){
     return a**2;
 }
 function factorial(a) {
+    if(a<0)
+        return NaN;
     let result=1;
     while(a){
         result*=a;
