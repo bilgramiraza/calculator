@@ -18,7 +18,7 @@ function init() {
     const extraBtn=document.querySelector('.extra');
     //Binding DOM elements to variables 
     
-    //////Event Handlers///////////////////////////////////////
+    //Event Handlers///////////////////////////////////////
     //waits for when a 'number' is clicked
     numberBtn.forEach((button)=>{       //Goes through each element in the node list and add an event listener to it
         button.addEventListener('click',(event)=>{     
@@ -62,77 +62,77 @@ function init() {
     document.addEventListener('keydown',(event)=>{
         keyboardInputs(calc,event.key)
     });
-//////Event Handlers///////////////////////////////////////
+    //End of Event Handlers
 }
 //End of Initializing Function
-//##//////////////////////////////
-function allClearHandling(obj) {
-    obj.inputA="";                             //Sets all values to Zero or empty
-    obj.inputB="";
-    obj.operator="";
-    obj.result="0";
-    display(obj,true);                         //updates the display
-}
-//////////////////////////////////
 
-//##//////////////////////////////
-function equalsHandling(obj) {
-    if(obj.inputB!==""){                       //checks to make sure the button hasn't been pressed prematurely 
-        operate(obj);                          //calculates the value of the 2 numbers 
-        display(obj,true);                     //displays it
-        adder(obj,"",true);                    //then places the result to the first number and empties the second
-    }                                          //number for further operations, if any.
-}
-//////////////////////////////////
 
-//##//////////////////////////////
-function inputHandling(obj,input) {
-    adder(obj,input);      //Adds number(stored in input) to the appropriate variable
-    display(obj);                             //displays the recently modified number string
-}
-//////////////////////////////////
-
-//##//////////////////////////////
-function dotHandling(obj) { 
-    //Checks if the current operator is blank AND that the first number has a decimal in it already.
-    // if both are false checks if the second number has a decimal in it. 
-    //if condition is true ignores the input since a single number cannot have multiple decimal points
-    if( (obj.operator === "" && 
-        obj.inputA.includes('.')) || obj.inputB.includes('.'));//<- note the semicolon
-    //if both sides of the OR check above fail goes ahead and adds "." to the appropriate number and displays the new number
-    else{
-        adder(obj,".");
-        display(obj);
+// #2 Adder Function//////////////////////
+//Responsible for adding integers to the end of the number string.
+//Determines which number to operate on, on the basis of the state of the 'operator' variable
+//(empty)=>Number1
+//(Any other value)=>Number 2
+//Also has an special 'result' flag in case we want to add the result from the last calculation to the first number(multi-step calculations)
+//in which case it clears the operator and second input variable while placing the result into the first number variable
+function adder(obj,input,result=false){
+    if(result){
+        obj.operator="";
+        obj.inputA=obj.result;
+        obj.inputB="";
     }
+    else if(obj.operator==="")  obj.inputA+=input;  //if operator is empty string concatenate new number to the end of the string of number 1
+    else    obj.inputB+=input;  //Else do it for number 2 variable
 }
-//////////////////////////////////
+//End of Adder Function
 
-//##//////////////////////////////
-function backspaceHandling(obj) {
-    if(obj.operator==="")  obj.inputA=obj.inputA.slice(0,obj.inputA.length-1);  //Checks which number has to be operated on
-    else obj.inputB=obj.inputB.slice(0,obj.inputB.length-1); //Then removes the last added character from the string
-    display(obj);                                              //displays modified number
+
+// #3 Advanced operations Function///////////////////
+function advancedPanel(obj) {
+    const advanceBtn=document.querySelectorAll('.advanced');
+    advanceBtn.forEach((button)=>{
+        button.addEventListener('click',(event)=>{
+            obj.operator=event.target.id;
+            console.log(obj.operator);
+            operate(obj);
+            display(obj,true);
+            adder(obj,"",true);
+        });
+    });
 }
-//////////////////////////////////
+//End of Advanced Operations Function
 
 
-//##//////////////////////////////
-function operatorHandling(obj,input) {
-    if(obj.operator!==""&&obj.inputB!==""){         //Condition for multi-operator calculations
-                                                    //(more than 2 numbers without any '=' in between)
-        operate(obj);                               //calculates the value of the 2 numbers 
-        display(obj,true);                          //displays it
-        adder(obj,"",true);                         //then places the result to the first number and empties the second 
-                                                    //number for further operations
-        obj.operator=input;     //finally stores this new operation for the operation between the next 2 numbers
+// #4 Display Function/////////////////// 
+//Responsible for displaying numbers on the webpage.
+//Determines which number to display, on the basis of the state of the 'operator' variable
+//(empty)=>Number1
+//(Any other value)=>Number 2
+//Also has an special 'result' flag in case we want to show the result from the last calculation(multi-step calculations)
+function display(obj,result=false) {
+    const operation=document.querySelector('.operationDisplay');
+    const input=document.querySelector('.inputDisplay');
+    const history=document.querySelector('.historyDisplay');
+
+    if(result){
+        operation.textContent=(obj.operator===""?" ":obj.operator);
+        input.textContent=(obj.result===""?" ":obj.result);
+        history.textContent=(obj.inputB===""?" ":obj.inputB);
+    }
+    else if(obj.operator===""){
+        operation.textContent=(obj.operator===""?" ":obj.operator);
+        input.textContent=(obj.inputA===""?" ":obj.inputA);
+        history.textContent=(obj.result===""?" ":obj.result);
     }
     else{
-        obj.operator=input;     //adds operation to the variable for calculations
-        display(obj);
+        operation.textContent=(obj.operator===""?" ":obj.operator);
+        input.textContent=(obj.inputB===""?" ":obj.inputB);
+        history.textContent=(obj.inputA===""?" ":obj.inputA);
     }
 }
-//////////////////////////////////
-//## /////////////////////////////
+//End of Display Function
+
+
+// #5 Keyboard Inputs Function /////////////////////////////
 function keyboardInputs(obj,input) {
     switch (input) {
         case "1":
@@ -164,69 +164,80 @@ function keyboardInputs(obj,input) {
 }
 //////////////////////////////////
 
-// #2 Adder Function//////////////////////
-//Responsible for adding integers to the end of the number string.
-//Determines which number to operate on, on the basis of the state of the 'operator' variable
-//(empty)=>Number1
-//(Any other value)=>Number 2
-//Also has an special 'result' flag in case we want to add the result from the last calculation to the first number(multi-step calculations)
-//in which case it clears the operator and second input variable while placing the result into the first number variable
-function adder(obj,input,result=false){
-    if(result){
-        obj.operator="";
-        obj.inputA=obj.result;
-        obj.inputB="";
-    }
-    else if(obj.operator==="")  obj.inputA+=input;  //if operator is empty string concatenate new number to the end of the string of number 1
-    else    obj.inputB+=input;  //Else do it for number 2 variable
+
+// #6 ERROR HANDLING///////////////
+
+// 6A Error handling for inputting numbers//////////////////////////////
+function inputHandling(obj,input) {
+    adder(obj,input);                               //Adds number(stored in input) to the appropriate variable
+    display(obj);                                   //displays the recently modified number string
 }
-//End of Adder Function
+//////////////////////////////////
 
-// #3 Advanced operations Function///////////////////
-function advancedPanel(obj) {
-    const advanceBtn=document.querySelectorAll('.advanced');
-    advanceBtn.forEach((button)=>{
-        button.addEventListener('click',(event)=>{
-            obj.operator=event.target.id;
-            console.log(obj.operator);
-            operate(obj);
-            display(obj,true);
-            adder(obj,"",true);
-        });
-    });
-}
-///////////////////////////////
-
-// #4 Display Function/////////////////// 
-//Responsible for displaying numbers on the webpage.
-//Determines which number to display, on the basis of the state of the 'operator' variable
-//(empty)=>Number1
-//(Any other value)=>Number 2
-//Also has an special 'result' flag in case we want to show the result from the last calculation(multi-step calculations)
-function display(obj,result=false) {
-    const operation=document.querySelector('.operationDisplay');
-    const input=document.querySelector('.inputDisplay');
-    const history=document.querySelector('.historyDisplay');
-
-    if(result){
-        operation.textContent=(obj.operator===""?" ":obj.operator);
-        input.textContent=(obj.result===""?" ":obj.result);
-        history.textContent=(obj.inputB===""?" ":obj.inputB);
-    }
-    else if(obj.operator===""){
-        operation.textContent=(obj.operator===""?" ":obj.operator);
-        input.textContent=(obj.inputA===""?" ":obj.inputA);
-        history.textContent=(obj.result===""?" ":obj.result);
-    }
+// 6B Error Handling for operator input//////////////////////////////
+function operatorHandling(obj,input) {
+    if(obj.operator!==""&&obj.inputB!==""){         //Condition for multi-operator calculations
+                                                    //(more than 2 numbers without any '=' in between)
+        operate(obj);                               //calculates the value of the 2 numbers 
+        display(obj,true);                          //displays it
+        adder(obj,"",true);                         //then places the result to the first number and empties the second 
+                                                    //number for further operations
+        obj.operator=input;                         //finally stores this new operation for the 
+    }                                               //operation between the next 2 numbers
     else{
-        operation.textContent=(obj.operator===""?" ":obj.operator);
-        input.textContent=(obj.inputB===""?" ":obj.inputB);
-        history.textContent=(obj.inputA===""?" ":obj.inputA);
+        obj.operator=input;                         //adds operation to the variable for calculations
+        display(obj);
     }
 }
-//End of Display Function
+//////////////////////////////////
 
-// #5 Operate Function/////////////////// 
+// 6C Error handling for '.' input//////////////////////////////
+function dotHandling(obj) { 
+    //Checks if the current operator is blank AND that the first number has a decimal in it already.
+    // if both are false checks if the second number has a decimal in it. 
+    //if condition is true ignores the input since a single number cannot have multiple decimal points
+    if( (obj.operator === "" && 
+        obj.inputA.includes('.')) || obj.inputB.includes('.'));//<- note the semicolon
+    //if both sides of the OR check above fail goes ahead and adds "." to the appropriate number and displays the new number
+    else{
+        adder(obj,".");
+        display(obj);
+    }
+}
+//////////////////////////////////
+
+// 6D Error handling for Equals operation//////////////////////////////
+function equalsHandling(obj) {
+    if(obj.inputB!==""){                       //checks to make sure the button hasn't been pressed prematurely 
+        operate(obj);                          //calculates the value of the 2 numbers 
+        display(obj,true);                     //displays it
+        adder(obj,"",true);                    //then places the result to the first number and empties the second
+    }                                          //number for further operations, if any.
+}
+//////////////////////////////////
+
+// 6E Error handling for single character removal//////////////////////////////
+function backspaceHandling(obj) {
+    if(obj.operator==="")  obj.inputA=obj.inputA.slice(0,obj.inputA.length-1);  //Checks which number has to be operated on
+    else obj.inputB=obj.inputB.slice(0,obj.inputB.length-1); //Then removes the last added character from the string
+    display(obj);                                              //displays modified number
+}
+//////////////////////////////////
+
+// 6F Error Handling for All Clear Operation//////////////////////////////
+function allClearHandling(obj) {
+    obj.inputA="";                             //Sets all values to Zero or empty
+    obj.inputB="";
+    obj.operator="";
+    obj.result="0";
+    display(obj,true);                         //updates the display
+}
+//////////////////////////////////
+
+//End of ERROR HANDLING
+
+
+// #7 Operate Function/////////////////// 
 // Responsible for deciding which operation to perform on the numbers provided
 function operate(obj) {
     let temp1,temp2;
@@ -285,7 +296,8 @@ function operate(obj) {
 }
 //End of operate Function
 
-// #6 Calculation Functions ////////////
+
+// #8 Calculation Functions ////////////
 function add(a,b){
     return a+b;
 }
