@@ -8,8 +8,8 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    width:95%;
-    height: 95vh;
+    width:1000px;
+    height: 810px;
     margin: 1em auto;
 }
 

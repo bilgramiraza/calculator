@@ -6,5 +6,5 @@ reformat html/css using "grid-template-areas"
 ?icons for operators/screen? DONE
 add functionality to buttons DONE
 Add more operations DONE
-Keyboard Intergration
+Keyboard Intergration DONE
 make website look good

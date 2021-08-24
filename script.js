@@ -19,72 +19,150 @@ function init() {
     //Binding DOM elements to variables 
     
     //////Event Handlers///////////////////////////////////////
-    //Goes through each element in the node list and add an event listener to it
-    numberBtn.forEach((button)=>{
-        button.addEventListener('click',(event)=>{     //waits for when a 'number' is clicked
-            adder(calc,event.target.textContent);      //Adds number(stored in text content) to the appropriate variable
-            display(calc);                             //displays the recently modified number string
+    //waits for when a 'number' is clicked
+    numberBtn.forEach((button)=>{       //Goes through each element in the node list and add an event listener to it
+        button.addEventListener('click',(event)=>{     
+            inputHandling(calc,event.target.textContent);
         });
     });
 
-    dotBtn.addEventListener('click',(event)=>{         //waits for when the decimal point button is clicked
-        //Checks if the current operator is blank AND that the first number has a decimal in it already.
-        // if both are false checks if the second number has a decimal in it. 
-        //if condition is true ignores the input since a single number cannot have multiple decimal points
-        if((calc.operator===""&&calc.inputA.includes('.'))||calc.inputB.includes('.'));//<- note the semicolon
-        //if both sides of the OR check above fail goes ahead and adds "." to the appropriate number and displays the new number
-        else{
-            adder(calc,".");
-            display(calc);
-        }
+    //waits for when the decimal point button is clicked
+    dotBtn.addEventListener('click',()=>{
+        dotHandling(calc);
     });
 
-    //goes through each element in the operation nodelist and adds an event listener to it
-    operatorBtn.forEach((button)=>{
-        button.addEventListener('click',(event)=>{          //waits for when an 'operation' is clicked
-            if(calc.operator!==""&&calc.inputB!==""){       //Condition for multi-operator calculations
-                                                            //(more than 2 numbers without any '=' in between)
-                operate(calc);                              //calculates the value of the 2 numbers 
-                display(calc,true);                         //displays it
-                adder(calc,"",true);                        //then places the result to the first number and empties the second 
-                                                            //number for further operations
-                calc.operator=event.target.textContent;     //finally stores this new operation for the operation between the next 2 numbers
-            }
-            else{
-                calc.operator=event.target.textContent;     //adds operation to the variable for calculations
-                display(calc);
-            }
+    ////waits for when the operation button(+,-,*,/,%) is clicked
+    operatorBtn.forEach((button)=>{     //Goes through each element in the node list and add an event listener to it
+        button.addEventListener('click',(event)=>{
+            operatorHandling(calc,event.target.textContent)
         });
     });
 
-///////////////////////////////////////////////////    
-    equalsBtn.addEventListener('click',(event)=>{   //waits for when the 'Equals to'(=) button is clicked
-        if(calc.inputB!==""){                       //checks to make sure the button hasn't been pressed prematurely 
-            operate(calc);                          //calculates the value of the 2 numbers 
-            display(calc,true);                     //displays it
-            adder(calc,"",true);                    //then places the result to the first number and empties the second
-        }                                           //number for further operations, if any.
+    //waits for when the 'Equals to'(=) button is clicked
+    equalsBtn.addEventListener('click',()=>{
+        equalsHandling(calc);
     });
-    ///////////////////////////////////////////////////    
     
-    allClearBtn.addEventListener('click',()=>{      //waits for when the 'All Clear'(AC) button is clicked
-        calc.inputA="";                             //Sets all values to Zero or empty
-        calc.inputB="";
-        calc.operator="";
-        calc.result="0";
-        display(calc,true);                         //updates the display
+    //waits for when the 'All Clear'(AC) button is clicked
+    allClearBtn.addEventListener('click',()=>{
+        allClearHandling(calc);
     });
 
-    clearBtn.addEventListener('click',()=>{         //waits for when the 'Clear'(C) button is clicked
-        if(calc.operator==="")  calc.inputA=calc.inputA.slice(0,calc.inputA.length-1);  //Checks which number has to be operated on
-        else calc.inputB=calc.inputB.slice(0,calc.inputB.length-1); //Then removes the last added character from the string
-        display(calc);  //displays modified number
+    //waits for when the 'Clear'(C) button is clicked
+    clearBtn.addEventListener('click',()=>{
+        backspaceHandling(calc);
     });
 
-    extraBtn.addEventListener('click',()=>{advancedPanel(calc)});
+    //waits for when the 'EXTRA' button is clicked
+    extraBtn.addEventListener('click',()=>{
+        advancedPanel(calc)
+    });
+
+    //waits for when the user presses a key using a keyboard
+    document.addEventListener('keydown',(event)=>{
+        keyboardInputs(calc,event.key)
+    });
 //////Event Handlers///////////////////////////////////////
 }
 //End of Initializing Function
+//##//////////////////////////////
+function allClearHandling(obj) {
+    obj.inputA="";                             //Sets all values to Zero or empty
+    obj.inputB="";
+    obj.operator="";
+    obj.result="0";
+    display(obj,true);                         //updates the display
+}
+//////////////////////////////////
+
+//##//////////////////////////////
+function equalsHandling(obj) {
+    if(obj.inputB!==""){                       //checks to make sure the button hasn't been pressed prematurely 
+        operate(obj);                          //calculates the value of the 2 numbers 
+        display(obj,true);                     //displays it
+        adder(obj,"",true);                    //then places the result to the first number and empties the second
+    }                                          //number for further operations, if any.
+}
+//////////////////////////////////
+
+//##//////////////////////////////
+function inputHandling(obj,input) {
+    adder(obj,input);      //Adds number(stored in input) to the appropriate variable
+    display(obj);                             //displays the recently modified number string
+}
+//////////////////////////////////
+
+//##//////////////////////////////
+function dotHandling(obj) { 
+    //Checks if the current operator is blank AND that the first number has a decimal in it already.
+    // if both are false checks if the second number has a decimal in it. 
+    //if condition is true ignores the input since a single number cannot have multiple decimal points
+    if( (obj.operator === "" && 
+        obj.inputA.includes('.')) || obj.inputB.includes('.'));//<- note the semicolon
+    //if both sides of the OR check above fail goes ahead and adds "." to the appropriate number and displays the new number
+    else{
+        adder(obj,".");
+        display(obj);
+    }
+}
+//////////////////////////////////
+
+//##//////////////////////////////
+function backspaceHandling(obj) {
+    if(obj.operator==="")  obj.inputA=obj.inputA.slice(0,obj.inputA.length-1);  //Checks which number has to be operated on
+    else obj.inputB=obj.inputB.slice(0,obj.inputB.length-1); //Then removes the last added character from the string
+    display(obj);                                              //displays modified number
+}
+//////////////////////////////////
+
+
+//##//////////////////////////////
+function operatorHandling(obj,input) {
+    if(obj.operator!==""&&obj.inputB!==""){         //Condition for multi-operator calculations
+                                                    //(more than 2 numbers without any '=' in between)
+        operate(obj);                               //calculates the value of the 2 numbers 
+        display(obj,true);                          //displays it
+        adder(obj,"",true);                         //then places the result to the first number and empties the second 
+                                                    //number for further operations
+        obj.operator=input;     //finally stores this new operation for the operation between the next 2 numbers
+    }
+    else{
+        obj.operator=input;     //adds operation to the variable for calculations
+        display(obj);
+    }
+}
+//////////////////////////////////
+//## /////////////////////////////
+function keyboardInputs(obj,input) {
+    switch (input) {
+        case "1":
+        case "2":    
+        case "3":
+        case "4":
+        case "5":
+        case "6":
+        case "7":
+        case "8":
+        case "9":
+        case "0":inputHandling(obj,input);
+            break;
+        case"+":
+        case"-":
+        case"*":
+        case"/":
+        case"%":operatorHandling(obj,input);
+            break;
+        case"Enter":
+        case"=":equalsHandling(obj);
+            break;
+        case"Backspace":backspaceHandling(obj);
+            break;
+        case".":dotHandling(obj);
+            break;
+        default:break;
+    }
+}
+//////////////////////////////////
 
 // #2 Adder Function//////////////////////
 //Responsible for adding integers to the end of the number string.
