@@ -1,104 +1,255 @@
 :root{
     box-sizing: border-box;   
-    font-weight: 400;
-    font-size: 2em;
+    --clr-complement: hsl(0 0% 0%);
+    --clr-primary:hsl(0, 0%, 100%);
+    --clr-accentA:hsl(300, 100%, 25%);
+    --clr-accentB:hsl(39, 100%, 50%);
 }
 body{
-    background-color: gray;
+    height: 95%;
+    width: 95%;
+    font-size: 2em;
+}
+.backgroundImage{
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url('/background.svg');
+}
+
+.calculator{
+    min-width: 500px;
+    max-width: 50%;
+    min-height:100%;
+    margin: 2em auto;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    width:1000px;
-    height: 810px;
-    margin: 1em auto;
+    border: 0.125em solid #fbae3c;
 }
 
 .calcTitle{
-    text-align: left;
-    line-height: 1em;
-    height:10%;
+    font-size: 2em;
+    margin: 0.5em auto;
+    color: #fbae3c;
+    font-weight: bold;
+    border-radius: 50%;
+    padding:0.35em;
+    background-color: #C0526A;
+    border: 0.0625em solid #fbae3c;
+    box-shadow: 
+    0 0 0.25em 0.2em #683a67,
+    0 0 0.5em 0.4em #18223c;
 }
 
 .calcScreen{
     display: flex;
     flex-direction: row;
-    height: 20%;
-    background-color: white;
-    border: 0.125em ridge black;
+    margin: 0.5em;
+    border: 0.0625em solid #f6884d;
 }
 .operationDisplay{
-    width: 15%;
-    font-size: 1.25em;
+    width: 20%;
+    min-width: 1em;
+    font-size: 1.5em;
+    height:1em;
     text-align: center;
-    margin: 0;
-    border-right: 0.125em solid black;
+    color:white;
+    border-right: 0.0625em solid #f6884d;
+    background-color: #18223c;
 }
 #inputColumn{
-    width: 85%;
+    position: relative;
+    width: 80%;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
+    color:white;
+    background-color: #001220;
+}
+.inputDisplay{
+    font-size: 1em;
     text-align: right;
-    position: relative;
 }
 .historyDisplay{
     position: absolute;
-    right:4em;
-    bottom:0.3em;
-    width: 50%;
-    min-height: 1.25em;
-    border: 0.125em inset black;
-    background-color: white;
-    z-index: 2;
-}
-.inputDisplay{
-    width: 100%;
-    height: 100%;
-    font-size: 1.25em;
-    padding: 0;
-    margin: 0;
+    bottom: 1.4em;
+    right: 3em;
+    width:50%;
+    height: 1em;
+    font-size: 0.8em;
+    text-align: right;
+    background-color: #18223c;
+    color:white;
+    outline:#f6884d solid 0.0625em;
 }
 .buttonBody{
+    width: 100%;
+    height:50%;
     display: flex;
     flex-direction: column;
-    justify-content:space-around;
-    width: 100%;
+    background-color: #18223c;
 }
 .extrapanel,.basepanel{
     display: grid;
-    width: 95%;
-    margin: 1em auto;
-    grid-template-columns: repeat(4,1fr);
-    gap:0.25rem;
+    width: 90%;
+    padding:0.25em;
+    margin:0.25em auto;
+    border: 0.125em ridge #f6884d;
+    background-color: #C0526A;
 }
 .extrapanel{
-    height:25%;
-    grid-template-rows: repeat(2,1fr);
-    gap:0.25rem;
-    padding: 0.125em;
-    border:0.25em ridge black;
+    height: 40%;
+    grid-template-columns: repeat(3 , minmax(0, 1fr));
+    grid-template-rows: repeat(3 , minmax(0, 1fr));
+    grid-template-areas: 
+        "square fact root"
+        "e percent pi"
+        "sin cos tan";
 }
+
 .basepanel{
-    height:70%;
-    grid-template-rows: repeat(5,1fr);
-    gap:0.25rem;
+    height: 60%;
+    grid-template-columns: repeat(4 , minmax(0, 1fr));
+    grid-template-rows: repeat(5 , minmax(0, 1fr));
+    grid-template-areas: 
+        "extra C AC sign"
+        "nine eight seven divide"
+        "six five four multiply"
+        "three two one minus"
+        "dot zero equals plus";
+}
+
+#square{
+    grid-area: square;
+}
+#factorial{
+    grid-area: fact;
+}
+#sqroot{
+    grid-area: root;
+}
+#euler{
+    grid-area: e;
+}
+#percent{
+    grid-area: percent;
+}
+#pi{
+    grid-area: pi;
+}
+#sine{
+    grid-area: sin;
+}
+#cosine{
+    grid-area: cos;
+}
+#tangent{
+    grid-area: tan;
+}
+
+#extra{
+    grid-area: extra;
+}
+#clear{
+    grid-area: C;
+}
+#allClear{
+    grid-area: AC;
+}
+#nine{
+    grid-area: nine;
+}
+#eight{
+    grid-area: eight;
+}
+#seven{
+    grid-area: seven;
+}
+#six{
+    grid-area: six;
+}
+#five{
+    grid-area: five;
+}
+#four{
+    grid-area: four;
+}
+#three{
+    grid-area: three;
+}
+#two{
+    grid-area: two;
+}
+#one{
+    grid-area: one;
+}
+#zero{
+    grid-area: zero;
+}
+#sign{
+    grid-area: sign;
+}
+#add{
+    grid-area: plus;
+}
+#subtract{
+    grid-area: minus;
+}
+#multiply{
+    grid-area: multiply;
+}
+#divide{
+    grid-area: divide;
+}
+#dot{
+    grid-area: dot;
+}
+#equal{
+    grid-area: equals;
 }
 
 button{
-    font-size: 1.5rem;
-    background: none;
+    font-size: 1em;
 }
 .operation{
+    background-color: #18223c;
+    color: white;
+    border-color: orange;
+}
+.operation:hover,.operation:active{
     background-color: orange;
+    color: black;
+    border-color: #18223c;
 }
 .function{
-    background-color: red;
+    background-color: #18223c;
     color: white;
+    border-color: red;
+}
+.function:hover,.function:active{
+    background-color: red;
+    color: black;
+    border-color: #18223c;
 }
 .numbers,.dot{
+    background-color: #18223c;
+    color: white;
+    border-color: white;
+}
+.numbers:hover,.numbers:active,.dot:hover,.dot:active{
     background-color: white;
+    color: black;
+    border-color: #18223c;
 }
 .extra,.advanced{
-    background-color: purple;
+    background-color: #18223c;
+    border-color: purple;
     color: white;
+}
+.extra:hover,.extra:active, .advanced:hover,.advanced:active{
+    background-color: purple;
+    color: black;
+    border-color: #18223c;
 }
 
