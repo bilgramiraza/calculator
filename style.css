@@ -15,7 +15,7 @@ body{
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    background-image: url('./background.svg');
+    background-image: url('https://raw.githubusercontent.com/bilgramiraza/calculator/main/background.svg?sanitize=true');
 }
 
 .calculator{
