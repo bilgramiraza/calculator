@@ -55,6 +55,7 @@ function init() {
 
     //waits for when the 'EXTRA' button is clicked
     extraBtn.addEventListener('click',()=>{
+        extraBtn.classList.add("lock");
         advancedPanel(calc)
     });
 
@@ -86,20 +87,56 @@ function adder(obj,input,result=false){
 //End of Adder Function
 
 
-// #3 Advanced operations Function///////////////////
+// #3 Advanced Panel Function///////////////////
 function advancedPanel(obj) {
+    const basePanel=document.querySelector(".basepanel");
     const advanceBtn=document.querySelectorAll('.advanced');
+    basePanel.classList.add("showhide");
     advanceBtn.forEach((button)=>{
         button.addEventListener('click',(event)=>{
-            obj.operator=event.target.id;
-            console.log(obj.operator);
-            operate(obj);
-            display(obj,true);
-            adder(obj,"",true);
+            advancedOperationHandling(obj,event.target.id);
+            display(obj);
         });
     });
 }
-//End of Advanced Operations Function
+//End of Advanced Panel Function
+
+// 3A Advanced Operation Handling Function///////////////////
+function advancedOperationHandling(obj,input) {
+    if(obj.operator==="")
+        obj.inputA=advancedOperation(obj.inputA,input);
+    else
+        obj.inputB=advancedOperation(obj.inputB,input);
+}
+//////////////////////////////////
+
+// 3B Advanced Operation Function///////////////////
+function advancedOperation(input,operation) {
+    let temp=parseFloat(input);
+    let result;
+    switch (operation) {
+        case 'percent':result=temp/100;
+            break;   
+        case 'square':result=temp**2;
+            break;
+        case 'factorial':result=factorial(temp);
+            break;
+        case 'sqroot':result=Math.sqrt(temp);
+            break;
+        case 'sine':result=Math.sin(temp);
+            break;
+        case 'cosine':result=Math.cos(temp);
+            break;
+        case 'tangent':result=Math.tan(temp);
+            break;
+        case 'euler':result=Math.E;
+            break;
+        case 'pi':result=Math.PI;
+            break;
+    }
+    return result.toString(10);
+}
+//////////////////////////////////
 
 
 // #4 Display Function/////////////////// 
@@ -176,7 +213,11 @@ function inputHandling(obj,input) {
 
 // 6B Error Handling for operator input//////////////////////////////
 function operatorHandling(obj,input) {
-    if(obj.operator!==""&&obj.inputB!==""){         //Condition for multi-operator calculations
+    if(input==="±"){
+        togglesign(obj);
+        display(obj);
+    }
+    else if(obj.operator!==""&&obj.inputB!==""){         //Condition for multi-operator calculations
                                                     //(more than 2 numbers without any '=' in between)
         operate(obj);                               //calculates the value of the 2 numbers 
         display(obj,true);                          //displays it
@@ -258,24 +299,6 @@ function operate(obj) {
             break;
         case '/':result=divide(temp1,temp2);
             break;
-        case '%':result=percent(temp1,temp2);
-            break;   
-        case 'square':result=exponent(temp1);
-            break;
-        case 'factorial':result=factorial(temp1);
-            break;
-        case 'sqroot':result=Math.sqrt(temp1);
-            break;
-        case 'sine':result=Math.sin(temp1);
-            break;
-        case 'cosine':result=Math.cos(temp1);
-            break;
-        case 'tangent':result=Math.tan(temp1);
-            break;
-        case 'euler':result=Math.E;
-            break;
-        case 'pi':result=Math.PI;
-            break;
     }
     if(result===undefined){
         obj.result="0";
@@ -311,12 +334,6 @@ function divide(a,b){
     if(!b)  return NaN;
     return a/b;
 }
-function percent(a,b){
-    return (a/100)*b;
-}
-function exponent(a){
-    return a**2;
-}
 function factorial(a) {
     if(a<0)
         return NaN;
@@ -327,5 +344,17 @@ function factorial(a) {
     }
     return result;
 }
-
+function togglesign(obj) {
+    let temp=0;
+    if(obj.operator===""){
+        temp = parseFloat(obj.inputA);
+        temp=temp*-1;
+        obj.inputA=temp.toString(10);
+    }
+    else{
+        temp = parseFloat(obj.inputB);
+        temp=temp*-1;
+        obj.inputB=temp.toString(10);
+    }
+}
 //End of calculation Functions

@@ -19,7 +19,7 @@ body{
 }
 
 .calculator{
-    min-width: 500px;
+    min-width: 550px;
     max-width: 50%;
     min-height:100%;
     margin: 2em auto;
@@ -70,6 +70,7 @@ body{
 .inputDisplay{
     font-size: 1em;
     text-align: right;
+    overflow: hidden;
 }
 .historyDisplay{
     position: absolute;
@@ -82,6 +83,7 @@ body{
     background-color: #18223c;
     color:white;
     outline:#f6884d solid 0.0625em;
+    overflow: hidden;
 }
 .buttonBody{
     width: 100%;
@@ -113,11 +115,12 @@ body{
     grid-template-columns: repeat(4 , minmax(0, 1fr));
     grid-template-rows: repeat(5 , minmax(0, 1fr));
     grid-template-areas: 
-        "extra C AC sign"
-        "nine eight seven divide"
-        "six five four multiply"
-        "three two one minus"
-        "dot zero equals plus";
+    "extra C AC sign"
+    "nine eight seven divide"
+    "six five four multiply"
+    "three two one minus"
+    "dot zero equals plus";
+    transform: translateY(-5.25em);
 }
 
 #square{
@@ -252,4 +255,17 @@ button{
     color: black;
     border-color: #18223c;
 }
-
+.showhide{
+    animation: showhide 1.5s ease-in-out  1 alternate forwards ;
+}
+@keyframes showhide {
+    100%{
+        transform:translateY(0em);
+    }
+}
+.lock{
+    background-color: purple;
+    color: black;
+    border-color: #18223c;
+    pointer-events: none;
+}
