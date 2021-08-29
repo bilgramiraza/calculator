@@ -8,8 +8,6 @@
   <p align="center">
     An online calculator using HTML,CSS and vanilla Javascript
     <br />
-    <a href="https://github.com/bilgramiraza/calculator"><strong>Explore the docs »</strong></a>
-    <br />
     <a href="https://bilgramiraza.github.io/calculator/">View Demo</a>
   </p>
 </p>
